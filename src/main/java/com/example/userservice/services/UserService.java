@@ -92,4 +92,14 @@ public class UserService {
         tokenRepository.save(myToken);
         return;
     }
+
+    public User validateToken(String token) throws InvalidTokenException {
+        Optional<Token> optionalToken = tokenRepository.findByValueAndIsDeleted(token, false);
+        if(optionalToken.isEmpty()){
+            throw new InvalidTokenException("Invalid token");
+        }
+
+        Token myToken = optionalToken.get();
+        return myToken.getUser();
+    }
 }

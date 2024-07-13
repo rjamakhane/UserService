@@ -10,10 +10,7 @@ import com.example.userservice.repositories.TokenRepository;
 import com.example.userservice.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/users")
@@ -42,5 +39,11 @@ public class UserController {
     public ResponseEntity<Void> Logout(@RequestBody LogOutRequestDto logOutRequestDto) throws InvalidTokenException {
         userService.logout(logOutRequestDto.getToken());
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/validate/{token}")
+    public UserDto validateToken(@PathVariable String token) throws InvalidTokenException {
+        User user = userService.validateToken(token);
+        return UserDto.from(user);
     }
 }
