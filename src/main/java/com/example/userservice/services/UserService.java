@@ -1,11 +1,13 @@
 package com.example.userservice.services;
 
+import com.example.userservice.exception.InvalidCredentialsException;
 import com.example.userservice.exception.InvalidPasswordException;
 import com.example.userservice.exception.InvalidTokenException;
 import com.example.userservice.models.Token;
 import com.example.userservice.models.User;
 import com.example.userservice.repositories.TokenRepository;
 import com.example.userservice.repositories.UserRepository;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +42,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public Token login(String email, String password) throws InvalidPasswordException {
+    public Token login(String email, String password) throws InvalidCredentialsException {
         /*
         * check if the user exist with the given email or not
         * if not throw an exception and redirect the user to signup
@@ -55,7 +57,7 @@ public class UserService {
 
         User user = optionalUser.get();
         if(!bCryptPasswordEncoder.matches(password, user.getPassword())){
-            throw new InvalidPasswordException("Please enter correct password");
+            throw new InvalidCredentialsException("Please enter correct email / password");
         }
 
         //Login successfull
@@ -72,14 +74,15 @@ public class UserService {
         token.setExpiryDate(expiryDate);
 
         //token value is randomly generated string of 128 characters
-        token.setValue("");
+        token.setValue(RandomStringUtils.randomAlphanumeric(128));
         token.setUser(user);
+        token.setIsDeleted(false);
 
-        return null;
+        return token;
     }
 
-    public void logout(Token token) throws InvalidTokenException {
-        Optional<Token> optionalToken = tokenRepository.findByValueAndIsDeleted(token.getValue(), false);
+    public void logout(String token) throws InvalidTokenException {
+        Optional<Token> optionalToken = tokenRepository.findByValueAndIsDeleted(token, false);
         if(optionalToken.isEmpty()){
             throw new InvalidTokenException("Invalid token");
         }

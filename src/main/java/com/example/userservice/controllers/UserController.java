@@ -1,6 +1,7 @@
 package com.example.userservice.controllers;
 
 import com.example.userservice.dtos.*;
+import com.example.userservice.exception.InvalidCredentialsException;
 import com.example.userservice.exception.InvalidPasswordException;
 import com.example.userservice.exception.InvalidTokenException;
 import com.example.userservice.models.Token;
@@ -29,7 +30,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public LoginResponseDto login(@RequestBody LoginRequestDto loginRequestDto) throws InvalidPasswordException {
+    public LoginResponseDto login(@RequestBody LoginRequestDto loginRequestDto) throws InvalidCredentialsException {
         Token token = userService.login(loginRequestDto.getEmail(), loginRequestDto.getPassword());
 
         LoginResponseDto loginResponseDto = new LoginResponseDto();
@@ -39,14 +40,7 @@ public class UserController {
 
     @PostMapping("/logout")
     public ResponseEntity<Void> Logout(@RequestBody LogOutRequestDto logOutRequestDto) throws InvalidTokenException {
-        ResponseEntity<Void> responseEntity = null;
-        try{
-            userService.logout(logOutRequestDto.getToken());
-            responseEntity = new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e){
-            System.out.println("Something went wrong");
-            responseEntity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        return responseEntity;
+        userService.logout(logOutRequestDto.getToken());
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
