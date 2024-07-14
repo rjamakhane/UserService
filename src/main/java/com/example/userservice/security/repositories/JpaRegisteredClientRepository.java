@@ -1,4 +1,4 @@
-package com.example.userservice.security.services;
+package com.example.userservice.security.repositories;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Set;
 
 import com.example.userservice.security.models.Client;
-import com.example.userservice.security.repositories.ClientRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;

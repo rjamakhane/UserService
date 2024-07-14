@@ -1,6 +1,6 @@
 package com.example.userservice;
 
-import com.example.userservice.security.services.JpaRegisteredClientRepository;
+import com.example.userservice.security.repositories.JpaRegisteredClientRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,7 +20,7 @@ class UserServiceApplicationTests {
     void contextLoads() {
     }
 
-    /*@Test
+    @Test
     void storeRegisteredClientInDB() {
         RegisteredClient oidcClient = RegisteredClient.withId(UUID.randomUUID().toString())
                 .clientId("oidc-client")
@@ -37,6 +37,6 @@ class UserServiceApplicationTests {
                 .build();
         registeredClientRepository.save(oidcClient);
 
-    }*/
+    }
 
 }
