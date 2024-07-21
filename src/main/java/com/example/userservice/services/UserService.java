@@ -102,4 +102,12 @@ public class UserService {
         Token myToken = optionalToken.get();
         return myToken.getUser();
     }
+
+    public User getUser(Long id) {
+        Optional<User> optionalUser = userRepository.findById(id);
+        if(optionalUser.isEmpty()){
+            return null;
+        }
+        return optionalUser.get();
+    }
 }
